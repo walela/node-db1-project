@@ -7,7 +7,7 @@ const server = express()
 server.use(express.json())
 server.use(morgan('dev'))
 
-function getAll() {
+function getAll (){
   return db.select('id', 'name', 'budget').from('accounts')
 }
 
