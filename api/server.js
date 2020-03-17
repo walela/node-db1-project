@@ -12,7 +12,7 @@ function getAll() {
 }
 
 function getById(id) {
-  return db('posts')
+  return db('accounts')
     .where({ id: id })
     .select('id', 'name', 'budget')
 }
@@ -28,6 +28,22 @@ server.get('/api/accounts/', async (req, res) => {
   } catch (err) {
     console.log(err)
     res.status(500).json({ message: 'Error getting accounts' })
+  }
+})
+
+server.get('/api/accounts/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const data = await getById(id)
+    if (data.length === 0) {
+      res.status(200).json({ message: `No account with id ${id}` })
+    } else {
+      console.log(data) // data is an array of objects
+      res.status(200).json(data[0])
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: 'Error getting post by id' })
   }
 })
 
