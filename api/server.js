@@ -21,6 +21,17 @@ function create(account) {
   return db('accounts').insert(account)
 }
 
+function edit(id, account) {
+  return db('accounts')
+    .where({ id: id })
+    .update(account)
+}
+function remove(id) {
+  return db('accounts')
+    .where({ id: id })
+    .del()
+}
+
 server.get('/', (_, res) => {
   res.send('<h1>Accounts API with knex</h1>')
 })
@@ -71,6 +82,8 @@ server.post('/api/accounts', async (req, res) => {
     res.status(500).json({ message: 'Error creating new account' })
   }
 })
+
+
 
 server.all('*', (req, res) => {
   res.status(404).send('<h1>Whoops! Resource was not found on the server.</h1>')
