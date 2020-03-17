@@ -17,6 +17,10 @@ function getById(id) {
     .select('id', 'name', 'budget')
 }
 
+function create(account) {
+  return db('accounts').insert(account)
+}
+
 server.get('/', (_, res) => {
   res.send('<h1>Accounts API with knex</h1>')
 })
@@ -44,6 +48,27 @@ server.get('/api/accounts/:id', async (req, res) => {
   } catch (err) {
     console.log(err)
     res.status(500).json({ message: 'Error getting post by id' })
+  }
+})
+
+server.post('/api/accounts', async (req, res) => {
+  const newAccount = req.body
+
+  try {
+    if (!newAccount.name || !newAccount.budget) {
+      console.error('Malformed request')
+      res
+        .status(400)
+        .json({ message: 'New accounts must include a name and budget' })
+    }
+    const data = await create(newAccount)
+    console.log(data)
+    res
+      .status(200)
+      .json({ message: `A new account with id of ${data[0]} was created` })
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: 'Error creating new account' })
   }
 })
 
