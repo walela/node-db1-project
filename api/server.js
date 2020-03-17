@@ -83,7 +83,38 @@ server.post('/api/accounts', async (req, res) => {
   }
 })
 
+server.put('/:id', async (req, res) => {
+  const { id } = req.params
+  const updatedAccount = req.body
+  try {
+    const data = await getById(id)
+    if (data.length === 0) {
+      res.status(200).json({ message: `No post with id ${id}` })
+    } else {
+      const data = await edit(id, updatedAccount)
+      res.status(200).json({ message: `${data} posts were affected` })
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: 'Fatal error updating account' })
+  }
+})
 
+server.delete('/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const data = await getById(req.params.id)
+    if (!data.length) {
+      res.status(200).json({ message: `No account with id ${id}` })
+    } else {
+      const data = await remove(id)
+      res.status(200).json({ message: `${data} accounts were affected` })
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: 'Fatal error deleting account by id' })
+  }
+})
 
 server.all('*', (req, res) => {
   res.status(404).send('<h1>Whoops! Resource was not found on the server.</h1>')
