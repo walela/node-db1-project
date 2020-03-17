@@ -83,7 +83,7 @@ server.post('/api/accounts', async (req, res) => {
   }
 })
 
-server.put('/:id', async (req, res) => {
+server.put('/api/accounts/:id', async (req, res) => {
   const { id } = req.params
   const updatedAccount = req.body
   try {
@@ -100,10 +100,10 @@ server.put('/:id', async (req, res) => {
   }
 })
 
-server.delete('/:id', async (req, res) => {
+server.delete('/api/accounts/:id', async (req, res) => {
   const { id } = req.params
   try {
-    const data = await getById(req.params.id)
+    const data = await getById(id)
     if (!data.length) {
       res.status(200).json({ message: `No account with id ${id}` })
     } else {
