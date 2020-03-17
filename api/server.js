@@ -1,9 +1,20 @@
-const express = require("express");
+const express = require('express')
+const morgan = require('morgan')
 
-const db = require("../data/dbConfig.js");
+const accountsRouter = require('./accounts/accountsRouter')
 
-const server = express();
+const server = express()
+server.use(morgan('dev'))
+server.use(express.json())
 
-server.use(express.json());
+server.use('api/accounts', accountsRouter)
 
-module.exports = server;
+server.get('/', (_, res) => {
+  res.send('<h1>Accounts API with knex</h1>')
+})
+
+server.all('*', (req, res) => {
+  res.status(404).send('<h1>Whoops! Resource was not found on the server.</h1>')
+})
+
+module.exports = server
